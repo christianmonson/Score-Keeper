@@ -8,6 +8,7 @@
 
 #import "SKScoreViewController.h"
 
+static CGFloat heightForView = 40;
 @interface SKViewController ()
 
 @property (nonatomic, weak) UIScrollView *scrollView;
@@ -24,6 +25,22 @@
     UINavigationItem *navItem = self.navigationItem;
     navItem.title = @"Score Keeper";
     self.scrollView = scrollView;
+    
+}
+
+- (void)addScoreView:(int)index {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightForView)];
+    UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width / 3 , heightForView)];
+    name.placeholder = @"name";
+    UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3, 0, self.view.frame.size.width / 3, heightForView)];
+    UIStepper *button = [[UIStepper alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3 *2, 0, self.view.frame.size.width / 3, heightForView)];
+    button.minimumValue = 0;
+    button.maximumValue = 1000;
+    [view addSubview:name];
+    [view addSubview:score];
+    [view addSubview:button];
+    
+    [self.scrollView addSubview:view];
     
 }
 
