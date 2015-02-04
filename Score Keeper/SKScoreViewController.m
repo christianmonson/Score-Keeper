@@ -10,6 +10,7 @@
 
 static CGFloat heightForView = 64;
 static CGFloat margin = 15;
+
 @interface SKViewController () <UITextFieldDelegate>
 
 @property (nonatomic, weak) UIScrollView *scrollView;
@@ -30,49 +31,43 @@ static CGFloat margin = 15;
     
     self.scoreLabels = [NSMutableArray new];
     
-    [self addScoreView:4];
-    
-    
+    for (int i = 0; i < 4; i++) {
+        [self addScoreView:i];
+    }
 }
 
 - (void)addScoreView:(int)index {
     
-    int y = 0;
+    CGFloat width = self.view.frame.size.width;
     
-    for (int i = 0; i<index; i++) {
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightForView)];
-        
-       
-        
-        UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(margin, y, self.view.frame.size.width / 3 , heightForView)];
-        name.placeholder = @"name";
-        
-        name.delegate = self;
-        
-        UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3, y, self.view.frame.size.width / 3, heightForView)];
-        score.text = [NSString stringWithFormat:@"%d",0];
-        score.textAlignment = NSTextAlignmentCenter;
-        
-        [self.scoreLabels addObject:score];
-        
-        UIStepper *button = [[UIStepper alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3 *2, y + (heightForView / 3), self.view.frame.size.width / 3, heightForView)];
-        button.minimumValue = 0;
-        button.maximumValue = 1000;
-        button.tag = index;
-        [button addTarget:self action:@selector(scoreStepper:) forControlEvents:UIControlEventValueChanged];
-        
-        UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(0, y + heightForView, self.view.frame.size.width, 3)];
-        [dividerLine setBackgroundColor:[UIColor cyanColor]];
-        
-        [view addSubview:name];
-        [view addSubview:score];
-        [view addSubview:button];
-        [view addSubview:dividerLine];
-        
-        [self.scrollView addSubview:view];
-        
-        y = y + heightForView;
-    }
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, index * heightForView, width, heightForView)];
+    
+    UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(margin, margin, width / 3 , heightForView)];
+    name.placeholder = @"name";
+    name.delegate = self;
+    
+    UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(margin + width / 4, margin, width / 3, heightForView)];
+    score.text = [NSString stringWithFormat:@"%d", 0];
+    score.textColor = [UIColor magentaColor];
+    score.textAlignment = NSTextAlignmentCenter;
+    
+    [self.scoreLabels addObject:score];
+    
+    UIStepper *button = [[UIStepper alloc] initWithFrame:CGRectMake(width / 3 * 2, margin + 20, width / 3, heightForView)];
+    button.minimumValue = 0;
+    button.maximumValue = 1000;
+    button.tag = index;
+    [button addTarget:self action:@selector(scoreStepper:) forControlEvents:UIControlEventValueChanged];
+    
+    UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(0, margin + heightForView, width, 3)];
+    [dividerLine setBackgroundColor:[UIColor cyanColor]];
+    
+    [view addSubview:name];
+    [view addSubview:score];
+    [view addSubview:button];
+    [view addSubview:dividerLine];
+    
+    [self.scrollView addSubview:view];
     
 }
 
