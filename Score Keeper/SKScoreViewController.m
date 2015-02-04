@@ -8,10 +8,12 @@
 
 #import "SKScoreViewController.h"
 
-static CGFloat heightForView = 40;
-@interface SKViewController ()
+static CGFloat heightForView = 64;
+static CGFloat margin = 15;
+@interface SKViewController () <UITextFieldDelegate>
 
 @property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, strong) NSMutableArray *scoreLabels;
 
 @end
 
@@ -20,27 +22,72 @@ static CGFloat heightForView = 40;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64)];
     [self.view addSubview:scrollView];
     UINavigationItem *navItem = self.navigationItem;
     navItem.title = @"Score Keeper";
     self.scrollView = scrollView;
     
+    self.scoreLabels = [NSMutableArray new];
+    
+    [self addScoreView:4];
+    
+    
 }
 
 - (void)addScoreView:(int)index {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightForView)];
-    UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width / 3 , heightForView)];
-    name.placeholder = @"name";
-    UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3, 0, self.view.frame.size.width / 3, heightForView)];
-    UIStepper *button = [[UIStepper alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3 *2, 0, self.view.frame.size.width / 3, heightForView)];
-    button.minimumValue = 0;
-    button.maximumValue = 1000;
-    [view addSubview:name];
-    [view addSubview:score];
-    [view addSubview:button];
     
-    [self.scrollView addSubview:view];
+    int y = 0;
+    
+    for (int i = 0; i<index; i++) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightForView)];
+        
+       
+        
+        UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(margin, y, self.view.frame.size.width / 3 , heightForView)];
+        name.placeholder = @"name";
+        
+        name.delegate = self;
+        
+        UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3, y, self.view.frame.size.width / 3, heightForView)];
+        score.text = [NSString stringWithFormat:@"%d",0];
+        score.textAlignment = NSTextAlignmentCenter;
+        
+        [self.scoreLabels addObject:score];
+        
+        UIStepper *button = [[UIStepper alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 3 *2, y + (heightForView / 3), self.view.frame.size.width / 3, heightForView)];
+        button.minimumValue = 0;
+        button.maximumValue = 1000;
+        button.tag = index;
+        [button addTarget:self action:@selector(scoreStepper:) forControlEvents:UIControlEventValueChanged];
+        
+        UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(0, y + heightForView, self.view.frame.size.width, 3)];
+        [dividerLine setBackgroundColor:[UIColor cyanColor]];
+        
+        [view addSubview:name];
+        [view addSubview:score];
+        [view addSubview:button];
+        [view addSubview:dividerLine];
+        
+        [self.scrollView addSubview:view];
+        
+        y = y + heightForView;
+    }
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+    
+}
+
+- (void)scoreStepper:(id)sender {
+    UIStepper *stepper = sender;
+    double stepperValue = stepper.value;
+    
+    UILabel *label = self.scoreLabels[stepper.tag];
+    label.text = [NSString stringWithFormat:@"%d", (int) stepperValue];
     
 }
 
