@@ -47,6 +47,7 @@ static CGFloat margin = 15;
     UITextField *name = [[UITextField alloc] initWithFrame:CGRectMake(margin, margin, width / 3 , heightForView)];
     name.placeholder = @"name";
     name.delegate = self;
+    name.textColor = [UIColor yellowColor];
     
     UILabel *score = [[UILabel alloc] initWithFrame:CGRectMake(margin + width / 4, margin, width / 3, heightForView)];
     score.text = [NSString stringWithFormat:@"%d", 0];
