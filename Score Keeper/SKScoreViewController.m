@@ -31,9 +31,11 @@ static CGFloat margin = 15;
     
     self.scoreLabels = [NSMutableArray new];
     
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 6; i++) {
         [self addScoreView:i];
     }
+    
+    [self.view setBackgroundColor:[UIColor brownColor]];
 }
 
 - (void)addScoreView:(int)index {
